@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:restaurant/constants/app_sizes.dart';
 import 'package:restaurant/pages/home/home_page.dart';
 import 'package:restaurant/styles.dart';
@@ -19,10 +20,8 @@ class _SplashPageState extends State<SplashPage> {
   bool _isSplashLogoVisible = true;
 
   _navigateToHomePage() {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
+    Get.offAllNamed(
       HomePage.routeName,
-      (route) => false,
     );
   }
 

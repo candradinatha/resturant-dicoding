@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant/constants/strings.dart';
-import 'package:restaurant/model/restaurant_model.dart';
 import 'package:restaurant/styles.dart';
 
 import '../../constants/app_sizes.dart';
+import '../../data/model/restaurant_model.dart';
 
 class FoodDrinkWidget extends StatelessWidget {
   const FoodDrinkWidget({
@@ -12,7 +12,7 @@ class FoodDrinkWidget extends StatelessWidget {
     required this.type,
   });
 
-  final List<FoodOrDrink?>? menuList;
+  final List<Category?>? menuList;
   final String type;
 
   String _getTitle() {

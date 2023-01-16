@@ -8,6 +8,7 @@ const Color colorOnBg = Color(0XFFFFFFFF);
 const Color colorBgDarkAccent = Color(0xff1D1D1D);
 const Color colorBGDarkSecondaryAccent = Color(0xff2F2F31);
 const Color colorAccentBlue = Color(0xffA7E8E5);
+const Color colorDivider = Color(0xFF707070);
 
 final TextTheme myTextTheme = TextTheme(
   headline1: GoogleFonts.ubuntu(
