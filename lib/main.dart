@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:restaurant/constants/app_sizes.dart';
-import 'package:restaurant/model/restaurant_model.dart';
 import 'package:restaurant/pages/home/home_page.dart';
 import 'package:restaurant/pages/restaurant/restaurant_detail_page.dart';
+import 'package:restaurant/pages/restaurant/restaurant_review_page.dart';
+import 'package:restaurant/pages/search/search_page.dart';
 import 'package:restaurant/pages/splash/splash_page.dart';
 import 'package:restaurant/styles.dart';
+
+import 'data/model/restaurant_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +20,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Restaurant',
       theme: ThemeData(
         colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -56,6 +60,15 @@ class MyApp extends StatelessWidget {
               ),
             ),
         textTheme: myTextTheme,
+        buttonTheme: ButtonThemeData(
+          buttonColor: colorPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Sizes.p16),
+          ),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: colorPrimary,
+        ),
       ),
       initialRoute: SplashPage.routeName,
       routes: {
@@ -64,6 +77,9 @@ class MyApp extends StatelessWidget {
         RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
               item: ModalRoute.of(context)?.settings.arguments as Restaurant?,
             ),
+        SearchPage.routeName: (context) => const SearchPage(),
+        RestaurantReviewPage.routeName: (context) =>
+            const RestaurantReviewPage(),
       },
     );
   }

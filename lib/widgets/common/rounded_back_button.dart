@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../constants/app_sizes.dart';
 import '../../styles.dart';
@@ -10,13 +11,10 @@ class RoundedBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getBack() {
-      Navigator.pop(context);
-    }
 
     return SafeArea(
       child: GestureDetector(
-        onTap: getBack,
+        onTap: Get.back,
         child: Card(
           margin: const EdgeInsets.all(Sizes.p16),
           shape: RoundedRectangleBorder(
