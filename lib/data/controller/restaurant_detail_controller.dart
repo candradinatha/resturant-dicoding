@@ -42,11 +42,11 @@ class RestaurantDetailController extends GetxController {
     }).then((value) {
       Get.back();
       Get.back();
+      showSnackBar("Your review has been saved successfully");
       final updatedRestaurant = restaurantResponse.value;
       updatedRestaurant.restaurant?.customerReviews = value.customerReviews;
       restaurantResponse.value = updatedRestaurant;
       update();
-      showSnackBar("Your review has been saved successfully");
     }, onError: (e) {
       Get.back();
       showAPIErrorDialog(e);
