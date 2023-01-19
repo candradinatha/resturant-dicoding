@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:restaurant/constants/app_sizes.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 import 'package:restaurant/pages/restaurant/restaurant_review_page.dart';
-import 'package:restaurant/styles.dart';
 import 'package:restaurant/utils/helper.dart';
-import 'package:restaurant/widgets/common/custom_text_field.dart';
-import 'package:restaurant/widgets/common/primary_button.dart';
+import 'package:restaurant/widgets/restaurant/dialog_post_a_review.dart';
 
 import '../api/restaurant/restaurant_service.dart';
 
@@ -54,58 +50,8 @@ class RestaurantDetailController extends GetxController {
   }
 
   showPostAReviewForm() {
-    final reviewerCtrl = TextEditingController();
-    final reviewCtrl = TextEditingController();
-
     Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Sizes.p24),
-            color: colorBgDarkAccent,
-          ),
-          padding: const EdgeInsets.all(Sizes.p24),
-          clipBehavior: Clip.hardEdge,
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Create a review",
-                  style: Get.theme.textTheme.headline6,
-                ),
-                AppGaps.h24,
-                CustomTextForm(
-                  controller: reviewerCtrl,
-                  hint: "Reviewer Name",
-                  isRequired: true,
-                ),
-                AppGaps.h16,
-                CustomTextForm(
-                  controller: reviewCtrl,
-                  hint: "Review",
-                  isRequired: true,
-                  textInputType: TextInputType.multiline,
-                ),
-                AppGaps.h24,
-                PrimaryButton(
-                  title: "Submit",
-                  onTap: () {
-                    if (formKey.currentState?.validate() == true) {
-                      postAReview(
-                        reviewer: reviewerCtrl.value.text,
-                        review: reviewCtrl.value.text,
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      DialogPostAReview(),
     );
   }
 
