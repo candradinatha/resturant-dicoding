@@ -102,6 +102,10 @@ showProgressDialog() {
   );
 }
 
+hideProgressDialog() {
+  Get.close(1);
+}
+
 Color getRandomColor() {
   return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
 }
@@ -129,12 +133,16 @@ class Debouncer {
 }
 
 showSnackBar(String message) {
+  if (Get.isSnackbarOpen) {
+    Get.back();
+  }
   Get.rawSnackbar(
     margin: const EdgeInsets.symmetric(horizontal: Sizes.p16),
     messageText: Text(
       message,
       style: Get.theme.textTheme.bodyLarge,
     ),
+    // duration: const Duration(milliseconds: 1500),
     borderRadius: Sizes.p16,
   );
 }

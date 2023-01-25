@@ -19,9 +19,9 @@ class RestaurantDetailController extends GetxController {
     showProgressDialog();
     await restaurantService.getDetailRestaurant(restaurant?.id).then((value) {
       restaurantResponse.value = value;
-      Get.back();
+      hideProgressDialog();
     }, onError: (e) {
-      Get.back();
+      hideProgressDialog();
       showAPIErrorDialog(e);
     });
   }

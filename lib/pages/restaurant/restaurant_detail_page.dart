@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/constants/strings.dart';
+import 'package:restaurant/data/controller/database_controller.dart';
 import 'package:restaurant/data/controller/restaurant_detail_controller.dart';
+import 'package:restaurant/data/database/database_helper.dart';
+import 'package:restaurant/data/model/restaurant_arguments.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 import 'package:restaurant/styles.dart';
 import 'package:restaurant/utils/helper.dart';
 import 'package:restaurant/widgets/common/rounded_back_button.dart';
+import 'package:restaurant/widgets/common/rounded_favorite_button.dart';
 import 'package:restaurant/widgets/restaurant/food_drink_widget.dart';
 
 import '../../constants/app_sizes.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
-  const RestaurantDetailPage({super.key, this.item});
+  const RestaurantDetailPage({
+    super.key,
+    this.arguments,
+  });
 
   static const routeName = "/restaurant_detail";
 
-  final Restaurant? item;
+  final RestaurantArguments? arguments;
 
   @override
   Widget build(BuildContext context) {
+    final DatabaseController databaseController = Get.find();
+
     return GetBuilder(
       init: RestaurantDetailController(
-        restaurant: item,
+        restaurant: arguments?.restaurant,
       ),
       builder: (controller) => Scaffold(
         backgroundColor: colorBgDark,
@@ -34,8 +43,7 @@ class RestaurantDetailPage extends StatelessWidget {
                 Stack(
                   children: [
                     Hero(
-                      tag: controller.restaurantResponse.value.restaurant?.id ??
-                          "",
+                      tag: "${controller.restaurantResponse.value.restaurant?.id}${arguments?.heroAdditionalText}",
                       child: Image.network(
                         getImageUrl(
                           pictureId: controller
@@ -48,6 +56,22 @@ class RestaurantDetailPage extends StatelessWidget {
                     if (Navigator.canPop(context)) ...[
                       const RoundedBackButton(),
                     ],
+                    Positioned(
+                      right: 0,
+                      child: SafeArea(
+                        child: RoundedFavoriteButton(
+                          isFavorite: databaseController.restaurantFavorites
+                                      .firstWhereOrNull(
+                                          (e) => e.id == arguments?.restaurant?.id) ==
+                                  null
+                              ? false
+                              : true,
+                          onFavoriteTap: () {
+                            databaseController.addOrRemoveFavorite(arguments?.restaurant);
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Container(
@@ -116,7 +140,8 @@ class RestaurantDetailPage extends StatelessWidget {
                                   onTap: controller.navigateToRestaurantReview,
                                   child: Text(
                                     "See All Reviews",
-                                    style: Get.theme.textTheme.subtitle1?.copyWith(
+                                    style:
+                                        Get.theme.textTheme.subtitle1?.copyWith(
                                       color: Colors.yellow,
                                       decoration: TextDecoration.underline,
                                     ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/constants/app_sizes.dart';
+import 'package:restaurant/data/model/restaurant_arguments.dart';
 import 'package:restaurant/pages/home/home_page.dart';
+import 'package:restaurant/pages/main_tab/main_tab_page.dart';
 import 'package:restaurant/pages/restaurant/restaurant_detail_page.dart';
 import 'package:restaurant/pages/restaurant/restaurant_review_page.dart';
 import 'package:restaurant/pages/search/search_page.dart';
@@ -69,13 +71,18 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: colorPrimary,
         ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: colorBgDarkAccent,
+          unselectedItemColor: Colors.white60,
+        )
       ),
       initialRoute: SplashPage.routeName,
       routes: {
         SplashPage.routeName: (context) => const SplashPage(),
+        MainTabPage.routeName: (context) => const MainTabPage(),
         HomePage.routeName: (context) => const HomePage(),
         RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-              item: ModalRoute.of(context)?.settings.arguments as Restaurant?,
+              arguments: ModalRoute.of(context)?.settings.arguments as RestaurantArguments?,
             ),
         SearchPage.routeName: (context) => const SearchPage(),
         RestaurantReviewPage.routeName: (context) =>

@@ -5,6 +5,8 @@ import 'package:restaurant/data/controller/search_controller.dart';
 import 'package:restaurant/widgets/search/search_result.dart';
 import 'package:restaurant/styles.dart';
 
+import '../../data/controller/database_controller.dart';
+
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
@@ -12,6 +14,8 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DatabaseController databaseController = Get.find();
+
     return GetBuilder(
       init: SearchController(),
       builder: (controller) => Scaffold(
@@ -60,6 +64,7 @@ class SearchPage extends StatelessWidget {
         ),
         body: SearchResult(
           controller: controller,
+          databaseController: databaseController,
         ),
       ),
     );

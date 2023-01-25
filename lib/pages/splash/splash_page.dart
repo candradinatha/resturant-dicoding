@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/constants/app_sizes.dart';
 import 'package:restaurant/pages/home/home_page.dart';
+import 'package:restaurant/pages/main_tab/main_tab_page.dart';
 import 'package:restaurant/styles.dart';
 
 class SplashPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
   _navigateToHomePage() {
     Get.offAllNamed(
-      HomePage.routeName,
+      MainTabPage.routeName,
     );
   }
 
