@@ -3,7 +3,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:restaurant/data/api/restaurant/restaurant_service.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 import 'package:restaurant/pages/search/search_page.dart';
-import 'package:restaurant/utils/helper.dart';
+
+import '../../widgets/common/custom_dialogs.dart';
 
 class HomeController extends GetxController {
   final restaurantService = RestaurantService();

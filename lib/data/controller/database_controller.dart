@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:restaurant/data/database/database_helper.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
-import 'package:restaurant/utils/helper.dart';
+
+import '../../widgets/common/custom_dialogs.dart';
 
 class DatabaseController extends GetxController {
   final DatabaseHelper databaseHelper;

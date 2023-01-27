@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/constants/app_sizes.dart';
 import 'package:restaurant/data/model/restaurant_arguments.dart';
@@ -9,10 +14,25 @@ import 'package:restaurant/pages/restaurant/restaurant_review_page.dart';
 import 'package:restaurant/pages/search/search_page.dart';
 import 'package:restaurant/pages/splash/splash_page.dart';
 import 'package:restaurant/styles.dart';
+import 'package:restaurant/utils/background_service.dart';
+import 'package:restaurant/utils/notification_helper.dart';
 
 import 'data/model/restaurant_model.dart';
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  final BackgroundService _service = BackgroundService();
+  _service.initializeIsolate();
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+  }
+  await _notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
+
   runApp(const MyApp());
 }
 
@@ -74,7 +94,7 @@ class MyApp extends StatelessWidget {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: colorBgDarkAccent,
           unselectedItemColor: Colors.white60,
-        )
+        ),
       ),
       initialRoute: SplashPage.routeName,
       routes: {
