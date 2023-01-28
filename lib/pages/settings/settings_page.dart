@@ -25,7 +25,7 @@ class SettingsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Reminder at 11 PM",
+                  "Reminder at 11 AM",
                   style: Get.theme.textTheme.titleLarge,
                 ),
                 Obx(

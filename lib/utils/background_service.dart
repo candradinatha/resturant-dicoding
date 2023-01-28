@@ -26,8 +26,8 @@ class BackgroundService {
     );
   }
 
+  @pragma('vm:entry-point')
   static Future<void> callback() async {
-    print('Alarm fired!');
     final NotificationHelper notificationHelper = NotificationHelper();
     var result = await RestaurantService().getRestaurants();
     await notificationHelper.showNotification(

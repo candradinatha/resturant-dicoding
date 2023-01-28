@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/data/controller/main_tab_controller.dart';
-import 'package:restaurant/styles.dart';
 
 class MainTabPage extends StatelessWidget {
   const MainTabPage({super.key});

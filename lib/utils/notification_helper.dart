@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -31,14 +32,16 @@ class NotificationHelper {
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (NotificationResponse details) async {
-      final payload = details.payload;
-      if (payload != null) {
-        print('notification payload: ' + payload);
-      }
-      selectNotificationSubject.add(payload ?? 'empty payload');
-    });
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse details) async {
+        final payload = details.payload;
+        if (payload != null) {
+          print('notification payload: ' + payload);
+        }
+        selectNotificationSubject.add(payload ?? 'empty payload');
+      },
+    );
   }
 
   Future<void> showNotification(
@@ -46,7 +49,7 @@ class NotificationHelper {
       RestaurantListResponse restaurants) async {
     var channelId = "1";
     var channelName = "channel_01";
-    var channelDescription = "dicoding news channel";
+    var channelDescription = "restaurant channel";
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         channelId, channelName,
@@ -61,19 +64,27 @@ class NotificationHelper {
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
 
+    var random = Random();
+    var restaurant = restaurants
+        .restaurants?[random.nextInt(restaurants.restaurants?.length ?? 0)];
     var titleNotification = "<b>Check out this restaurant</b>";
-    var titleNews = restaurants.restaurants?[0]?.name;
+    var titleNews = restaurant?.name;
 
     await flutterLocalNotificationsPlugin.show(
-        0, titleNotification, titleNews, platformChannelSpecifics,
-        payload: jsonEncode(restaurants.toJson()));
+      0,
+      titleNotification,
+      titleNews,
+      platformChannelSpecifics,
+      payload: jsonEncode(
+        restaurant?.toJson(),
+      ),
+    );
   }
 
   void configureSelectNotificationSubject(String route) {
     selectNotificationSubject.stream.listen(
       (String payload) async {
-        var data = RestaurantListResponse.fromJson(jsonDecode(payload));
-        var restaurant = data.restaurants?[0];
+        var restaurant = Restaurant.fromJson(jsonDecode(payload));
         Get.toNamed(
           route,
           arguments: RestaurantArguments(

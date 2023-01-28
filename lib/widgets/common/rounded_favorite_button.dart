@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../constants/app_sizes.dart';
 import '../../styles.dart';

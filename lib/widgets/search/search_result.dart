@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:restaurant/data/controller/database_controller.dart';
 import 'package:restaurant/widgets/common/empty_data_widget.dart';
 

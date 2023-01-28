@@ -2,15 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:restaurant/constants/app_sizes.dart';
 import 'package:restaurant/constants/strings.dart';
-import 'package:restaurant/data/model/error_model.dart';
 import 'dart:math' as math;
-
-
-import '../styles.dart';
 
 getImageUrl({
   required String? pictureId,
