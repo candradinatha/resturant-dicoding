@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 import 'package:restaurant/pages/restaurant/restaurant_review_page.dart';
-import 'package:restaurant/utils/helper.dart';
 import 'package:restaurant/widgets/restaurant/dialog_post_a_review.dart';
 
+import '../../widgets/common/custom_dialogs.dart';
 import '../api/restaurant/restaurant_service.dart';
 
 class RestaurantDetailController extends GetxController {
@@ -19,9 +19,9 @@ class RestaurantDetailController extends GetxController {
     showProgressDialog();
     await restaurantService.getDetailRestaurant(restaurant?.id).then((value) {
       restaurantResponse.value = value;
-      Get.back();
+      hideProgressDialog();
     }, onError: (e) {
-      Get.back();
+      hideProgressDialog();
       showAPIErrorDialog(e);
     });
   }

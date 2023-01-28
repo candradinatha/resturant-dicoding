@@ -7,6 +7,9 @@ import 'package:restaurant/data/controller/home_controller.dart';
 import 'package:restaurant/styles.dart';
 import 'package:restaurant/widgets/restaurant/restaurant_list_item.dart';
 
+import '../../data/controller/database_controller.dart';
+import '../../data/database/database_helper.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -14,6 +17,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final databaseController =
+        Get.put(DatabaseController(databaseHelper: DatabaseHelper()));
+
     return GetBuilder(
       init: HomeController(),
       builder: (controller) {
@@ -100,14 +106,15 @@ class HomePage extends StatelessWidget {
                                 0,
                         (index) {
                           if (controller.isShimmering.isTrue) {
-                            return const RestaurantListItem(
+                            return RestaurantListItem(
                               item: null,
                               isShimmering: true,
+                              databaseController: databaseController,
                             );
                           } else {
                             return RestaurantListItem(
-                              item: controller
-                                  .restaurantResponse.value.restaurants?[index],
+                              item: controller.restaurantResponse.value.restaurants?[index],
+                              databaseController: databaseController,
                             );
                           }
                         },

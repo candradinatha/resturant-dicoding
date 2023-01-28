@@ -2,22 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant/constants/app_sizes.dart';
 import 'package:restaurant/constants/strings.dart';
+import 'package:restaurant/data/controller/database_controller.dart';
+import 'package:restaurant/data/model/restaurant_arguments.dart';
 import 'package:restaurant/pages/restaurant/restaurant_detail_page.dart';
 import 'package:restaurant/styles.dart';
 import 'package:restaurant/utils/helper.dart';
 import 'package:restaurant/widgets/common/shimmer_bar.dart';
 
 import '../../data/model/restaurant_model.dart';
+import '../common/rounded_favorite_button.dart';
 
 class RestaurantListItem extends StatelessWidget {
   const RestaurantListItem({
     super.key,
     required this.item,
     this.isShimmering = false,
+    required this.databaseController,
+    this.isFromFavoritePage = false,
   });
 
   final Restaurant? item;
   final bool isShimmering;
+  final DatabaseController databaseController;
+  final bool isFromFavoritePage;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,10 @@ class RestaurantListItem extends StatelessWidget {
       if (isShimmering == false) {
         Get.toNamed(
           RestaurantDetailPage.routeName,
-          arguments: item,
+          arguments: RestaurantArguments(
+            heroAdditionalText: isFromFavoritePage == true ? "favorite" : "",
+            restaurant: item,
+          ),
         );
       }
     }
@@ -48,16 +58,36 @@ class RestaurantListItem extends StatelessWidget {
                       borderRadius: 0,
                       height: 150,
                     )
-                  : Hero(
-                      tag: item?.id ?? "",
-                      child: Image.network(
-                        getImageUrl(
-                          pictureId: item?.pictureId,
-                          imageSize: ImageSize.medium,
+                  : Stack(
+                      children: [
+                        Hero(
+                          tag: "${item?.id}${isFromFavoritePage == true ? "favorite" : ""}",
+                          child: Image.network(
+                            getImageUrl(
+                              pictureId: item?.pictureId,
+                              imageSize: ImageSize.medium,
+                            ),
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
+                        Obx(
+                          () => Positioned(
+                            right: 0,
+                            child: RoundedFavoriteButton(
+                              isFavorite: databaseController.restaurantFavorites
+                                          .firstWhereOrNull(
+                                              (e) => e.id == item?.id) ==
+                                      null
+                                  ? false
+                                  : true,
+                              onFavoriteTap: () {
+                                databaseController.addOrRemoveFavorite(item);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
             ),
             Container(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
+import 'package:restaurant/data/controller/database_controller.dart';
+import 'package:restaurant/widgets/common/empty_data_widget.dart';
 
 import '../../constants/app_sizes.dart';
 import '../../data/controller/search_controller.dart';
@@ -11,9 +12,11 @@ class SearchResult extends StatelessWidget {
   const SearchResult({
     super.key,
     required this.controller,
+    required this.databaseController,
   });
 
   final SearchController controller;
+  final DatabaseController databaseController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +25,8 @@ class SearchResult extends StatelessWidget {
         if (controller.isSearching.isFalse &&
             controller.restaurantResponse.value.founded == 0 &&
             controller.searchCtrl.value.text.isNotEmpty) {
-          return Center(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Lottie.asset(
-                      "assets/data/gif_empty_data.json",
-                      height: 200,
-                    ),
-                    Text(
-                      'No result for "${controller.searchCtrl.value.text}"',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.grey,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          return EmptyDataWidget(
+            message: 'No result for "${controller.searchCtrl.value.text}"',
           );
         } else {
           return SingleChildScrollView(
@@ -58,14 +42,16 @@ class SearchResult extends StatelessWidget {
                         0,
                 (index) {
                   if (controller.isSearching.isTrue) {
-                    return const RestaurantListItem(
+                    return RestaurantListItem(
                       item: null,
                       isShimmering: true,
+                      databaseController: databaseController,
                     );
                   } else {
                     return RestaurantListItem(
                       item: controller
                           .restaurantResponse.value.restaurants?[index],
+                      databaseController: databaseController,
                     );
                   }
                 },

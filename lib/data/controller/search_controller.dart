@@ -4,6 +4,7 @@ import 'package:restaurant/data/api/restaurant/restaurant_service.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 
 import '../../utils/helper.dart';
+import '../../widgets/common/custom_dialogs.dart';
 
 class SearchController extends GetxController {
   final restaurantService = RestaurantService();
