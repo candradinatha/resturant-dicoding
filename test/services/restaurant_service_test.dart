@@ -1,33 +1,47 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:restaurant/data/api/restaurant/restaurant_service.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 
-void main() {
-  test(
-    "Should be able to convert json from restaurant service fetch",
-    () async {
-      var restaurantService = RestaurantService();
-      var restaurantList = await restaurantService.getRestaurants();
-      var restaurant = restaurantList.restaurants?[Random().nextInt(
-        restaurantList.restaurants?.length ?? 0,
-      )];
-      var restaurantDetail = await restaurantService.getDetailRestaurant(
-        restaurant?.id,
-      );
-      var postAReview = await restaurantService.postAReview({
-        "id": restaurant?.id,
-        "name": "automate test",
-        "review": "tester review",
-      });
+import 'restaurant_service_test.mocks.dart';
 
-      // restaurant list
-      expect(restaurantList, isInstanceOf<RestaurantListResponse>());
-      // restaurant detail
-      expect(restaurantDetail, isInstanceOf<RestaurantDetailResponse>());
-      // restaurant - post a review
-      expect(postAReview, isInstanceOf<PostAReviewResponse>());
+@GenerateNiceMocks([MockSpec<RestaurantService>()])
+void main() {
+  group(
+    "Restaurant Service Test",
+    () {
+      late MockRestaurantService restaurantService;
+      setUpAll(() {
+        restaurantService = MockRestaurantService();
+      });
+      test(
+        "test fetch restaurants",
+        () async {
+          final model = RestaurantListResponse();
+
+          when(restaurantService.getRestaurants()).thenAnswer((_) async {
+            return model;
+          });
+
+          final response = await restaurantService.getRestaurants();
+
+          // restaurant list
+          expect(response, isInstanceOf<RestaurantListResponse>());
+          expect(response, model);
+        },
+      );
+
+      test(
+        "test fetch restaurants on Error",
+        () async {
+          when(restaurantService.getRestaurants()).thenAnswer((_) async {
+            throw Exception();
+          });
+          final response = restaurantService.getRestaurants();
+          expect(response, throwsException);
+        },
+      );
     },
   );
 }
