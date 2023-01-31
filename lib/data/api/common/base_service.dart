@@ -4,16 +4,17 @@ import 'package:restaurant/data/model/error_model.dart';
 
 class BaseService {
   final String baseUrl;
-  Dio? dio;
+  final Dio _dio = Dio();
 
-  BaseService({this.baseUrl = Config.baseUrl}) {
-    var options = BaseOptions(
+  BaseService({
+    this.baseUrl = Config.baseUrl,
+  }) {
+    _dio.options = BaseOptions(
       baseUrl: Config.baseUrl,
       receiveDataWhenStatusError: true,
     );
-    dio = Dio(options);
-    dio?.interceptors.clear();
-    dio?.interceptors.addAll([
+    _dio.interceptors.clear();
+    _dio.interceptors.addAll([
       LogInterceptor(
         request: true,
         responseBody: true,
@@ -26,7 +27,7 @@ class BaseService {
     String path,
     dynamic body,
   ) async {
-    final response = await dio?.post(
+    final response = await _dio.post(
       path,
       data: body,
       options: Options(
@@ -35,14 +36,14 @@ class BaseService {
         },
       ),
     );
-    return response?.data;
+    return response.data;
   }
 
   Future<dynamic> get<T>(
     String path, {
     dynamic query,
   }) async {
-    final response = await dio?.get(
+    final response = await _dio.get(
       path,
       queryParameters: query ?? {},
       options: Options(
@@ -51,7 +52,7 @@ class BaseService {
         },
       ),
     );
-    return response?.data;
+    return response.data;
   }
 
   ErrorResponse handleError(DioError e) {
