@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:restaurant/data/api/common/base_service.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 
@@ -7,6 +6,8 @@ class RestaurantService extends BaseService {
   static const searchPath = "/search";
   static const detailPath = "/detail";
   static const reviewPath = "/review";
+
+  RestaurantService({required super.client});
 
   Future<RestaurantListResponse> getRestaurants({
     bool isSearching = false,
@@ -22,7 +23,7 @@ class RestaurantService extends BaseService {
             : null,
       );
       return RestaurantListResponse.fromJson(response);
-    } on DioError catch (e) {
+    } catch (e) {
       throw handleError(e);
     }
   }
@@ -31,7 +32,7 @@ class RestaurantService extends BaseService {
     try {
       final response = await get("$detailPath/$id");
       return RestaurantDetailResponse.fromJson(response);
-    } on DioError catch(e) {
+    } catch (e) {
       throw handleError(e);
     }
   }
@@ -40,7 +41,7 @@ class RestaurantService extends BaseService {
     try {
       final response = await post(reviewPath, body);
       return PostAReviewResponse.fromJson(response);
-    } on DioError catch(e) {
+    } catch (e) {
       throw handleError(e);
     }
   }

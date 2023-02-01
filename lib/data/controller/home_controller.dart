@@ -3,11 +3,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:restaurant/data/api/restaurant/restaurant_service.dart';
 import 'package:restaurant/data/model/restaurant_model.dart';
 import 'package:restaurant/pages/search/search_page.dart';
+import 'package:http/http.dart' as http;
 
 import '../../widgets/common/custom_dialogs.dart';
 
 class HomeController extends GetxController {
-  final restaurantService = RestaurantService();
+  final restaurantService = RestaurantService(client: http.Client());
   final refreshController = RefreshController();
   final isShimmering = false.obs;
   final restaurantResponse = RestaurantListResponse().obs;

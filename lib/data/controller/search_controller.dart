@@ -5,9 +5,10 @@ import 'package:restaurant/data/model/restaurant_model.dart';
 
 import '../../utils/helper.dart';
 import '../../widgets/common/custom_dialogs.dart';
+import 'package:http/http.dart' as http;
 
 class SearchController extends GetxController {
-  final restaurantService = RestaurantService();
+  final restaurantService = RestaurantService(client: http.Client());
   final searchCtrl = TextEditingController();
   final restaurantResponse = RestaurantListResponse().obs;
   final isSearching = false.obs;

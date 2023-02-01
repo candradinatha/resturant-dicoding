@@ -6,10 +6,11 @@ import 'package:restaurant/widgets/restaurant/dialog_post_a_review.dart';
 
 import '../../widgets/common/custom_dialogs.dart';
 import '../api/restaurant/restaurant_service.dart';
+import 'package:http/http.dart' as http;
 
 class RestaurantDetailController extends GetxController {
   final Restaurant? restaurant;
-  final restaurantService = RestaurantService();
+  final restaurantService = RestaurantService(client: http.Client());
   final restaurantResponse = RestaurantDetailResponse().obs;
   final formKey = GlobalKey<FormState>();
 

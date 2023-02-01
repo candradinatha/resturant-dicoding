@@ -1,87 +1,78 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:restaurant/constants/strings.dart';
-import 'package:restaurant/data/model/error_model.dart';
+import 'package:http/http.dart' as http;
+
+import '../../model/error_model.dart';
 
 class BaseService {
   final String baseUrl;
-  final Dio _dio = Dio();
+  final http.Client client;
 
   BaseService({
+    required this.client,
     this.baseUrl = Config.baseUrl,
-  }) {
-    _dio.options = BaseOptions(
-      baseUrl: Config.baseUrl,
-      receiveDataWhenStatusError: true,
-    );
-    _dio.interceptors.clear();
-    _dio.interceptors.addAll([
-      LogInterceptor(
-        request: true,
-        responseBody: true,
-        requestHeader: true,
-      )
-    ]);
-  }
+  });
 
-  Future<dynamic> post<T>(
+  Future<dynamic> post(
     String path,
     dynamic body,
   ) async {
-    final response = await _dio.post(
-      path,
-      data: body,
-      options: Options(
+    try {
+      final response = await client.post(
+        Uri.parse(baseUrl + path),
+        body: jsonEncode(body),
         headers: {
           "Content-Type": "application/json",
         },
-      ),
-    );
-    return response.data;
+      );
+      return _returnResponseOrThrow(response);
+    } on SocketException {
+      throw ErrorResponse(message: 'No Internet connection');
+    }
   }
 
-  Future<dynamic> get<T>(
+  Future<dynamic> get(
     String path, {
     dynamic query,
   }) async {
-    final response = await _dio.get(
-      path,
-      queryParameters: query ?? {},
-      options: Options(
+    try {
+      final response = await client.get(
+        Uri.parse(baseUrl + path).replace(queryParameters: query),
         headers: {
           "Content-Type": "application/json",
         },
-      ),
-    );
-    return response.data;
+      );
+      return _returnResponseOrThrow(response);
+    } on SocketException {
+      throw ErrorResponse(message: 'No Internet connection');
+    }
   }
 
-  ErrorResponse handleError(DioError e) {
-    if (e.type == DioErrorType.response) {
-      try {
-        return errorResponseFromJson(e.response.toString());
-      } catch (_) {
-        try {
-          return errorResponseFromJson(e.response.toString());
-        } catch (_) {
-          return errorResponseFromJson(e.response.toString());
-        }
-      }
-    } else if (e.type == DioErrorType.connectTimeout) {
-      return ErrorResponse(
-        message: "Please check your internet connection",
-      );
-    } else if (e.type == DioErrorType.receiveTimeout) {
-      return ErrorResponse(
-        message: "Server error, please try again",
+  dynamic _returnResponseOrThrow(http.Response response) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body.toString());
+    } else if (response.statusCode == 400 ||
+        response.statusCode == 401 ||
+        response.statusCode == 403) {
+      throw errorResponseFromJson(response.body.toString());
+    } else if (response.statusCode == 500) {
+      throw ErrorResponse(
+        message: "Server Error",
       );
     } else {
-      try {
-        return errorResponseFromJson(e.response.toString());
-      } catch (_) {
-        return ErrorResponse(
-          message: "An error occurred",
-        );
-      }
+      throw ErrorResponse(
+        message: "Error occurred with status code ${response.statusCode}",
+      );
+    }
+  }
+
+  ErrorResponse handleError(Object response) {
+    if (response is ErrorResponse) {
+      return response;
+    } else {
+      return ErrorResponse(message: response.toString());
     }
   }
 }
